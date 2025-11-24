@@ -1,59 +1,52 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Microservicio de Autenticación – Laravel 12 + Sanctum
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+**Proyecto:** `PRY_AUTENTICACION_MICROSERVICIO`  
+**Base de datos:** MySQL  
+**Puerto:** `8000`  
+**URL base:** `http://(ip de la red):8000/api`
 
-## About Laravel
+## Objetivo del microservicio
+Proveer autenticación segura basada en tokens (Sanctum) para todo el sistema distribuido.  
+Es el único responsable de:
+- Registro de usuarios (opcional)
+- Login con generación de token personal
+- Validación remota de tokens desde otros microservicios
+- Devolver información del usuario autenticado (id, nombre, email, perfil)
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Características implementadas
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+| Funcionalidad                       | Endpoint                            | Método | Descripción |
+|-------------------------------------|-------------------------------------|--------|-----------|
+| Login                               | `/api/login`                        | POST   | Recibe email + password → devuelve token + datos del usuario |
+| Validación de token (para otros servicios) | `/api/validate-token`     | GET    | Pro tegido con `auth:sanctum`. Usado por el microservicio de Posts |
+| Información del usuario autenticado| `/api/user`                         | GET    | Devuelve datos completos del usuario |
+| Cerrar sesión (revocar todos los tokens) | `/api/logout`                  | POST   | Elimina todos los tokens del usuario |
+| Registro (opcional)                 | `/api/register`                     | POST   | Crea usuario con campos en español |
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Modelo User personalizado
+- Campo `name` → renombrado a `nombre`
+- Campo adicional: `perfil` (administrador | editor | usuario)
+- Uso del trait `HasApiTokens` de Sanctum
+- Password automáticamente hasheado
 
-## Learning Laravel
+## Estructura clave
+app/Models/User.php          ← campos en español + Sanctum
+app/Http/Controllers/AuthController.php ← login y validateToken
+app/Http/Controllers/Api/UserController.php ← register, logout, show
+routes/api.php               ← rutas públicas y protegidas organizadas
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+## Ejemplo de respuesta exitosa (login)
+```json
+{
+  "message": "Login exitoso",
+  "token": "1|laravel_sanctum_abc123...",
+  "user": {
+    "id": 1,
+    "nombre": "Administrador",
+    "email": "admin@test.com",
+    "perfil": "administrador"
+  }
+}
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
 
-## Laravel Sponsors
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
-
-### Premium Partners
-
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
-
-## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
