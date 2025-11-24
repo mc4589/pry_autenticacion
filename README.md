@@ -1,4 +1,13 @@
-# Microservicio de Autenticación – Laravel 12 + Sanctum
+# Microservicio de Autenticación con Laravel y Sanctum
+
+**Integrantes del equipo:**
+
+- Jonathan Hernández 
+- Marco Chacón 
+- Carlos Fernández 
+- Sandy Mariño
+- Sergio Condo 
+- Carlos Cantuña 
 
 **Proyecto:** `PRY_AUTENTICACION_MICROSERVICIO`  
 **Base de datos:** MySQL  
