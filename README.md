@@ -54,6 +54,16 @@ app/Http/Controllers/AuthController.php ← login y validateToken
 app/Http/Controllers/Api/UserController.php ← register, logout, show
 routes/api.php               ← rutas públicas y protegidas organizadas
 
+## Endpoints del Microservicio
+| Funcionalidad                                  | Endpoint          | Método | Descripción                                                    |
+| ---------------------------------------------- | ----------------- | ------ | -------------------------------------------------------------- |
+| Iniciar sesión                                 | `/login`          | POST   | Recibe email + contraseña → devuelve token y datos del usuario |
+| Validar token (usado por otros microservicios) | `/validate-token` | GET    | Protegido con `auth:sanctum`. Verifica que el token sea válido |
+| Obtener usuario autenticado                    | `/user`           | GET    | Devuelve ID, nombre, email y perfil                            |
+| Cerrar sesión                                  | `/logout`         | POST   | Revoca todos los tokens del usuario                            |
+| Registrar usuario (opcional)                   | `/register`       | POST   | Crea usuarios con campos personalizados                        |
+
+
 ## Ejemplo de respuesta exitosa (login)
 ```json
 {
