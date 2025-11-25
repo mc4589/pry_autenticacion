@@ -1,4 +1,8 @@
-# Microservicio de Autenticación con Laravel y Sanctum
+# Microservicio de Autenticación – Laravel 12 + Sanctum
+Proyecto: PRY_AUTENTICACION_MICROSERVICIO
+Base de datos: MySQL
+Puerto por defecto: 8000
+URL base: http://(ip-de-la-red):8000/api
 
 **Integrantes del equipo:**
 
@@ -9,10 +13,11 @@
 - Sergio Condo 
 - Carlos Cantuña 
 
-**Proyecto:** `PRY_AUTENTICACION_MICROSERVICIO`  
-**Base de datos:** MySQL  
-**Puerto:** `8000`  
-**URL base:** `http://(ip de la red):8000/api`
+## Descripción General
+
+Este microservicio implementa un sistema de autenticación centralizada para un entorno distribuido.
+Funciona mediante tokens personales (Laravel Sanctum), permitiendo que otros microservicios validen peticiones protegidas de forma segura.
+Es el único servicio encargado de gestionar usuarios y tokens, por lo que actúa como “Punto Único de Autenticación” dentro del ecosistema.
 
 ## Objetivo del microservicio
 Proveer autenticación segura basada en tokens (Sanctum) para todo el sistema distribuido.  
