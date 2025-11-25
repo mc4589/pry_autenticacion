@@ -1,8 +1,13 @@
 # Microservicio de Autenticación – Laravel 12 + Sanctum
+
 Proyecto: PRY_AUTENTICACION_MICROSERVICIO
+
 Base de datos: MySQL
+
 Puerto por defecto: 8000
+
 URL base: http://(ip-de-la-red):8000/api
+
 
 **Integrantes del equipo:**
 
